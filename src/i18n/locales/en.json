@@ -49,10 +49,22 @@
     "ctaButton": "Become a member"
   },
   "pillars": {
-    "robotics": { "title": "Robotics", "desc": "Autonomous platforms, control systems and mechatronics built end to end by our members." },
-    "programming": { "title": "Programming", "desc": "Web, mobile and embedded software — from first commit to a product students actually use." },
-    "electronics": { "title": "Electronics", "desc": "Circuit design, PCB prototyping and IoT systems that bring hardware ideas to life." },
-    "workshops": { "title": "Workshops", "desc": "Open, hands-on sessions that turn curiosity into a skill anyone on campus can pick up." }
+    "robotics": {
+      "title": "Robotics",
+      "desc": "Autonomous platforms, control systems and mechatronics built end to end by our members."
+    },
+    "programming": {
+      "title": "Programming",
+      "desc": "Web, mobile and embedded software — from first commit to a product students actually use."
+    },
+    "electronics": {
+      "title": "Electronics",
+      "desc": "Circuit design, PCB prototyping and IoT systems that bring hardware ideas to life."
+    },
+    "workshops": {
+      "title": "Workshops",
+      "desc": "Open, hands-on sessions that turn curiosity into a skill anyone on campus can pick up."
+    }
   },
   "about": {
     "eyebrow": "Who we are",
@@ -70,10 +82,22 @@
     "timelineTitleAccent": " so far"
   },
   "values": {
-    "innovation": { "title": "Innovation", "desc": "Pushing boundaries with creative engineering solutions." },
-    "collaboration": { "title": "Collaboration", "desc": "Working together to achieve what one cannot do alone." },
-    "passion": { "title": "Passion", "desc": "Driven by a deep love for science and technology." },
-    "excellence": { "title": "Excellence", "desc": "Striving for the highest quality in every project." }
+    "innovation": {
+      "title": "Innovation",
+      "desc": "Pushing boundaries with creative engineering solutions."
+    },
+    "collaboration": {
+      "title": "Collaboration",
+      "desc": "Working together to achieve what one cannot do alone."
+    },
+    "passion": {
+      "title": "Passion",
+      "desc": "Driven by a deep love for science and technology."
+    },
+    "excellence": {
+      "title": "Excellence",
+      "desc": "Striving for the highest quality in every project."
+    }
   },
   "projectsPage": {
     "eyebrow": "Our work",
@@ -174,7 +198,10 @@
     "password": "Password",
     "signInError": "Could not sign in. Check your email and password.",
     "signedInAs": "Signed in as",
-    "tabs": { "members": "Members", "photos": "Photos" },
+    "tabs": {
+      "members": "Members",
+      "photos": "Photos"
+    },
     "notConfiguredTitle": "Backend not connected yet",
     "notConfiguredBody": "Add your Supabase project URL and anon key to a .env file, then restart the dev server. Setup steps are in SUPABASE_SETUP.md.",
     "members": {
@@ -227,7 +254,8 @@
       "albumRequired": "Choose an event name first.",
       "filesRequired": "Select at least one photo.",
       "tooLarge": "{{name}} is larger than {{max}}MB and was skipped."
-    }
+    },
+    "notConfirmedHint": "This account's email is not confirmed. In Supabase → Authentication → Users, open the user and confirm it (or recreate with “Auto Confirm User” ticked)."
   },
   "common": {
     "retry": "Try again",

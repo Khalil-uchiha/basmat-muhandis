@@ -23,16 +23,20 @@ const SignIn = ({ onSubmit }: { onSubmit: (email: string, password: string) => P
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    setError(false);
+    setError(null);
     try {
-      await onSubmit(email, password);
-    } catch {
-      setError(true);
+      // Trim: pasted credentials often carry a stray space or newline.
+      await onSubmit(email.trim(), password);
+    } catch (err) {
+      // Surface what Supabase actually said — "invalid credentials",
+      // "email not confirmed" and a bad project URL need different fixes.
+      const message = err instanceof Error ? err.message : "";
+      setError(message || t("dashboard.signInError"));
     } finally {
       setBusy(false);
     }
@@ -92,9 +96,13 @@ const SignIn = ({ onSubmit }: { onSubmit: (email: string, password: string) => P
             </div>
 
             {error && (
-              <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {t("dashboard.signInError")}
-              </p>
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
+                <p>{t("dashboard.signInError")}</p>
+                <p className="mt-1 font-mono text-[11px] opacity-80">{error}</p>
+                {/^email not confirmed$/i.test(error) && (
+                  <p className="mt-2 text-xs opacity-90">{t("dashboard.notConfirmedHint")}</p>
+                )}
+              </div>
             )}
 
             <button
