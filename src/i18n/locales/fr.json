@@ -46,7 +46,12 @@
     "partnersLabel": "Soutenus par",
     "ctaTitle": "Prêt à laisser votre empreinte ?",
     "ctaLede": "Les inscriptions sont ouvertes à tous les étudiants du campus — aucune expérience requise, seulement l'envie de construire.",
-    "ctaButton": "Devenir membre"
+    "ctaButton": "Devenir membre",
+    "momentsEyebrow": "Dans l'atelier",
+    "momentsTitleLead": "Instants de",
+    "momentsTitleAccent": " nos événements",
+    "momentsLede": "Compétitions, ateliers et nuits de conception — photographiés par les membres qui y étaient.",
+    "momentsCta": "Voir la galerie"
   },
   "pillars": {
     "robotics": {

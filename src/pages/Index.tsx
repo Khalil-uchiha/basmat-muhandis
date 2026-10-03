@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import Layout from "@/components/Layout";
 import Logo from "@/components/Logo";
 import Marquee from "@/components/Marquee";
+import PhotoShowcase from "@/components/PhotoShowcase";
 import SectionHeading from "@/components/SectionHeading";
 import Counter from "@/components/motion/Counter";
 import Magnetic from "@/components/motion/Magnetic";
@@ -151,6 +152,9 @@ const Index = () => {
         </div>
       </div>
     </section>
+
+    {/* Club moments — real event photos from the gallery */}
+    <PhotoShowcase />
 
     {/* Mission statement */}
     <section className="py-24 sm:py-32">

@@ -46,7 +46,12 @@
     "partnersLabel": "Backed and supported by",
     "ctaTitle": "Ready to leave your mark?",
     "ctaLede": "Applications are open to every student on campus — no prior experience required, just the willingness to build.",
-    "ctaButton": "Become a member"
+    "ctaButton": "Become a member",
+    "momentsEyebrow": "In the workshop",
+    "momentsTitleLead": "Moments from",
+    "momentsTitleAccent": " our events",
+    "momentsLede": "Competitions, workshops and build nights — photographed by the members who were there.",
+    "momentsCta": "See the gallery"
   },
   "pillars": {
     "robotics": {

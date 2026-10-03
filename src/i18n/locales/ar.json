@@ -46,7 +46,12 @@
     "partnersLabel": "بدعم من",
     "ctaTitle": "مستعد لترك بصمتك؟",
     "ctaLede": "باب الانضمام مفتوح لكل طلبة الجامعة — لا نشترط خبرة سابقة، بل الرغبة في البناء.",
-    "ctaButton": "كن عضوًا"
+    "ctaButton": "كن عضوًا",
+    "momentsEyebrow": "داخل الورشة",
+    "momentsTitleLead": "لحظات من",
+    "momentsTitleAccent": " فعالياتنا",
+    "momentsLede": "مسابقات وورشات وليالي بناء — صوّرها الأعضاء الذين كانوا هناك.",
+    "momentsCta": "شاهد المعرض"
   },
   "pillars": {
     "robotics": {
