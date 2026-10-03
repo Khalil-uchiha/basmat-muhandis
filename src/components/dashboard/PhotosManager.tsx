@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { type Photo, createPhoto, deletePhoto, fetchPhotos, groupIntoAlbums } from "@/lib/content";
+import { describeError } from "@/lib/errors";
 
 const MAX_MB = 10;
 
@@ -51,7 +52,12 @@ const PhotosManager = () => {
       toast({ title: t("dashboard.photos.uploaded", { count }) });
       reset();
     },
-    onError: () => toast({ title: t("dashboard.photos.uploadError"), variant: "destructive" }),
+    onError: (error) =>
+      toast({
+        title: t("dashboard.photos.uploadError"),
+        description: describeError(error),
+        variant: "destructive",
+      }),
     onSettled: () => setProgress(null),
   });
 
@@ -61,7 +67,8 @@ const PhotosManager = () => {
       queryClient.invalidateQueries({ queryKey: ["photos"] });
       toast({ title: t("dashboard.photos.deleted") });
     },
-    onError: () => toast({ title: t("common.error"), variant: "destructive" }),
+    onError: (error) =>
+      toast({ title: t("common.error"), description: describeError(error), variant: "destructive" }),
   });
 
   const pickFiles = (list: FileList | null) => {

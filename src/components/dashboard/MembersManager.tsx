@@ -18,6 +18,7 @@ import {
   updateMember,
   uploadToStorage,
 } from "@/lib/content";
+import { describeError } from "@/lib/errors";
 
 const blank: MemberInput = {
   name: "",
@@ -74,8 +75,10 @@ const MemberForm = ({
       onDone();
     },
     onError: (error: Error) => {
+      const isValidation = error.message === "validation";
       toast({
-        title: error.message === "validation" ? t("dashboard.members.nameRequired") : t("common.error"),
+        title: isValidation ? t("dashboard.members.nameRequired") : t("common.error"),
+        description: isValidation ? undefined : describeError(error),
         variant: "destructive",
       });
     },
@@ -87,8 +90,12 @@ const MemberForm = ({
     try {
       const { url } = await uploadToStorage(file, "members");
       setForm((f) => ({ ...f, photo_url: url }));
-    } catch {
-      toast({ title: t("dashboard.photos.uploadError"), variant: "destructive" });
+    } catch (error) {
+      toast({
+        title: t("dashboard.photos.uploadError"),
+        description: describeError(error),
+        variant: "destructive",
+      });
     } finally {
       setUploading(false);
     }
@@ -228,13 +235,15 @@ const MembersManager = () => {
       queryClient.invalidateQueries({ queryKey: ["members"] });
       toast({ title: t("dashboard.members.deleted") });
     },
-    onError: () => toast({ title: t("common.error"), variant: "destructive" }),
+    onError: (error) =>
+      toast({ title: t("common.error"), description: describeError(error), variant: "destructive" }),
   });
 
   const ordering = useMutation({
     mutationFn: reorderMembers,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["members"] }),
-    onError: () => toast({ title: t("common.error"), variant: "destructive" }),
+    onError: (error) =>
+      toast({ title: t("common.error"), description: describeError(error), variant: "destructive" }),
   });
 
   const move = (index: number, delta: number) => {
