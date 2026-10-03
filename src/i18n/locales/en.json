@@ -205,7 +205,8 @@
     "signedInAs": "Signed in as",
     "tabs": {
       "members": "Members",
-      "photos": "Photos"
+      "photos": "Photos",
+      "hero": "Hero"
     },
     "notConfiguredTitle": "Backend not connected yet",
     "notConfiguredBody": "Add your Supabase project URL and anon key to a .env file, then restart the dev server. Setup steps are in SUPABASE_SETUP.md.",
@@ -260,7 +261,15 @@
       "filesRequired": "Select at least one photo.",
       "tooLarge": "{{name}} is larger than {{max}}MB and was skipped."
     },
-    "notConfirmedHint": "This account's email is not confirmed. In Supabase → Authentication → Users, open the user and confirm it (or recreate with “Auto Confirm User” ticked)."
+    "notConfirmedHint": "This account's email is not confirmed. In Supabase → Authentication → Users, open the user and confirm it (or recreate with “Auto Confirm User” ticked).",
+    "hero": {
+      "title": "Hero photos",
+      "subtitle": "Up to 5 photos for the stacked deck at the top of the landing page — the first thing every visitor sees. They are kept out of the gallery.",
+      "full": "All {{max}} slots are filled. Delete one to add another.",
+      "slotsLeft_one": "{{count}} slot left.",
+      "slotsLeft_other": "{{count}} slots left.",
+      "captionPlaceholder": "Short line shown over the photo"
+    }
   },
   "common": {
     "retry": "Try again",

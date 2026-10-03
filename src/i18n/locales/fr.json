@@ -205,7 +205,8 @@
     "signedInAs": "Connecté en tant que",
     "tabs": {
       "members": "Membres",
-      "photos": "Photos"
+      "photos": "Photos",
+      "hero": "Accueil"
     },
     "notConfiguredTitle": "Backend non connecté",
     "notConfiguredBody": "Ajoutez l'URL de votre projet Supabase et la clé anon dans un fichier .env, puis redémarrez le serveur. Les étapes sont dans SUPABASE_SETUP.md.",
@@ -260,7 +261,15 @@
       "filesRequired": "Sélectionnez au moins une photo.",
       "tooLarge": "{{name}} dépasse {{max}} Mo et a été ignorée."
     },
-    "notConfirmedHint": "L'e-mail de ce compte n'est pas confirmé. Dans Supabase → Authentication → Users, ouvrez l'utilisateur et confirmez-le (ou recréez-le en cochant « Auto Confirm User »)."
+    "notConfirmedHint": "L'e-mail de ce compte n'est pas confirmé. Dans Supabase → Authentication → Users, ouvrez l'utilisateur et confirmez-le (ou recréez-le en cochant « Auto Confirm User »).",
+    "hero": {
+      "title": "Photos de l'accueil",
+      "subtitle": "Jusqu'à 5 photos pour la pile en haut de la page d'accueil — la première chose que voit chaque visiteur. Elles n'apparaissent pas dans la galerie.",
+      "full": "Les {{max}} emplacements sont pris. Supprimez-en une pour en ajouter une autre.",
+      "slotsLeft_one": "{{count}} emplacement restant.",
+      "slotsLeft_other": "{{count}} emplacements restants.",
+      "captionPlaceholder": "Courte phrase affichée sur la photo"
+    }
   },
   "common": {
     "retry": "Réessayer",

@@ -45,11 +45,16 @@ create table if not exists public.photos (
   image_url     text        not null,
   storage_path  text,
   taken_on      date,
+  is_hero       boolean     not null default false,
   created_at    timestamptz not null default now()
 );
 
+-- Added after the first release; harmless to re-run.
+alter table public.photos add column if not exists is_hero boolean not null default false;
+
 create index if not exists photos_album_idx on public.photos (album);
 create index if not exists photos_created_at_idx on public.photos (created_at desc);
+create index if not exists photos_is_hero_idx on public.photos (is_hero) where is_hero;
 
 alter table public.photos enable row level security;
 

@@ -9,6 +9,7 @@ const photo = (id: string, album: string): Photo => ({
   image_url: `https://example.test/${id}.jpg`,
   storage_path: `events/${album}/${id}.jpg`,
   taken_on: null,
+  is_hero: false,
   created_at: "2026-01-01T00:00:00Z",
 });
 

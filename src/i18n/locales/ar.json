@@ -205,7 +205,8 @@
     "signedInAs": "مسجّل الدخول باسم",
     "tabs": {
       "members": "الأعضاء",
-      "photos": "الصور"
+      "photos": "الصور",
+      "hero": "الواجهة"
     },
     "notConfiguredTitle": "لم يتم ربط الخادم بعد",
     "notConfiguredBody": "أضف رابط مشروع Supabase ومفتاح anon في ملف ‎.env ثم أعد تشغيل الخادم. الخطوات في ملف SUPABASE_SETUP.md.",
@@ -260,7 +261,15 @@
       "filesRequired": "اختر صورة واحدة على الأقل.",
       "tooLarge": "حجم {{name}} يتجاوز {{max}} ميغابايت وتم تجاهلها."
     },
-    "notConfirmedHint": "البريد الإلكتروني لهذا الحساب غير مؤكَّد. من Supabase ← Authentication ← Users، افتح المستخدم وأكّده (أو أعد إنشاءه مع تفعيل «Auto Confirm User»)."
+    "notConfirmedHint": "البريد الإلكتروني لهذا الحساب غير مؤكَّد. من Supabase ← Authentication ← Users، افتح المستخدم وأكّده (أو أعد إنشاءه مع تفعيل «Auto Confirm User»).",
+    "hero": {
+      "title": "صور الواجهة",
+      "subtitle": "حتى 5 صور لحزمة البطاقات أعلى الصفحة الرئيسية — أوّل ما يراه كل زائر. لا تظهر هذه الصور في المعرض.",
+      "full": "كل الخانات الـ {{max}} ممتلئة. احذف واحدة لإضافة أخرى.",
+      "slotsLeft_one": "بقيت خانة واحدة.",
+      "slotsLeft_other": "بقيت {{count}} خانات.",
+      "captionPlaceholder": "سطر قصير يظهر فوق الصورة"
+    }
   },
   "common": {
     "retry": "إعادة المحاولة",

@@ -20,6 +20,8 @@ export type Photo = {
   image_url: string;
   storage_path: string | null;
   taken_on: string | null;
+  /** Shown in the landing-page hero stack rather than only the gallery. */
+  is_hero: boolean;
   created_at: string;
 };
 
@@ -107,6 +109,7 @@ export const fetchPhotos = async (): Promise<Photo[]> => {
   const { data, error } = await assertClient()
     .from("photos")
     .select("*")
+    .eq("is_hero", false)
     .order("taken_on", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
@@ -168,7 +171,7 @@ export const createPhoto = async (file: File, input: PhotoInput) => {
   const { url, path } = await uploadToStorage(file, `events/${slugify(input.album)}`);
   const { data, error } = await assertClient()
     .from("photos")
-    .insert({ ...input, image_url: url, storage_path: path })
+    .insert({ ...input, image_url: url, storage_path: path, is_hero: false })
     .select()
     .single();
 
@@ -187,6 +190,40 @@ export const deletePhoto = async (photo: Photo) => {
 
   const path = photo.storage_path ?? storagePathFromUrl(photo.image_url);
   if (path) await client.storage.from(MEDIA_BUCKET).remove([path]);
+};
+
+/* --------------------------------------------------------------- hero stack */
+
+/** The hero shows a small, deliberately curated set. */
+export const HERO_LIMIT = 5;
+
+export const fetchHeroPhotos = async (): Promise<Photo[]> => {
+  if (!isSupabaseConfigured) return [];
+
+  const { data, error } = await assertClient()
+    .from("photos")
+    .select("*")
+    .eq("is_hero", true)
+    .order("created_at", { ascending: true })
+    .limit(HERO_LIMIT);
+
+  if (error) throw error;
+  return (data ?? []) as Photo[];
+};
+
+export const createHeroPhoto = async (file: File, caption: string | null) => {
+  const { url, path } = await uploadToStorage(file, "hero");
+  const { data, error } = await assertClient()
+    .from("photos")
+    .insert({ album: "Hero", caption, image_url: url, storage_path: path, is_hero: true })
+    .select()
+    .single();
+
+  if (error) {
+    await assertClient().storage.from(MEDIA_BUCKET).remove([path]);
+    throw error;
+  }
+  return data as Photo;
 };
 
 /** Recover an object path from a public URL (older rows have no storage_path). */

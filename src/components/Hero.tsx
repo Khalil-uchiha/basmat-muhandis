@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import HeroPhotoStack from "./HeroPhotoStack";
 import Logo from "./Logo";
 import Aurora from "./background/Aurora";
 import CircuitField from "./background/CircuitField";
@@ -36,27 +37,16 @@ const Hero = () => {
       </div>
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid opacity-40 mask-fade-b" />
 
-      {/* Oversized emblem watermark */}
-      <motion.div
-        style={{ y: emblemY }}
-        aria-hidden
-        className="pointer-events-none absolute -end-24 top-1/2 hidden -translate-y-1/2 lg:block"
-      >
-        <Logo
-          variant="white"
-          className="h-[34rem] w-[34rem] animate-spin-slow opacity-[0.045]"
-        />
-      </motion.div>
-
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="container relative py-32"
+        className="container relative py-28 sm:py-32"
       >
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
         <motion.div
           initial="hidden"
           animate="show"
           transition={{ staggerChildren: 0.11, delayChildren: 0.15 }}
-          className="max-w-4xl"
+          className="max-w-2xl lg:max-w-none"
         >
           {/* Badge */}
           <motion.div
@@ -137,11 +127,25 @@ const Hero = () => {
           <motion.p
             variants={line}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-9 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/30"
+            /* Pointer-only: meaningless on a touch device, and it costs the
+               photo deck vertical space above the fold. */
+            className="mt-9 hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/30 [@media(any-hover:hover)]:inline-flex"
           >
             <MousePointerClick size={13} /> {t("hero.hint")}
           </motion.p>
         </motion.div>
+
+        {/* Photo deck — right on desktop, below the copy on phones */}
+        <motion.div
+          style={{ y: emblemY }}
+          initial={{ opacity: 0, scale: 0.94, x: 30 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto mt-10 h-64 w-full max-w-sm sm:h-72 lg:mx-0 lg:mt-0 lg:h-[26rem] lg:max-w-none"
+        >
+          <HeroPhotoStack />
+        </motion.div>
+        </div>
       </motion.div>
 
       {/* Scroll cue */}

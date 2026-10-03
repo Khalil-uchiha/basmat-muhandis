@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, ImageIcon, Loader2, LogOut, Users } from "lucide-react";
+import { AlertTriangle, ImageIcon, Loader2, LogOut, Sparkles, Users } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import Aurora from "@/components/background/Aurora";
 import CircuitField from "@/components/background/CircuitField";
+import HeroPhotosManager from "@/components/dashboard/HeroPhotosManager";
 import MembersManager from "@/components/dashboard/MembersManager";
 import PhotosManager from "@/components/dashboard/PhotosManager";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { club } from "@/data/site";
 
-type Tab = "members" | "photos";
+type Tab = "members" | "hero" | "photos";
 
 const SignIn = ({ onSubmit }: { onSubmit: (email: string, password: string) => Promise<void> }) => {
   const { t } = useTranslation();
@@ -160,6 +161,7 @@ const Dashboard = () => {
 
   const tabs: { id: Tab; icon: typeof Users }[] = [
     { id: "members", icon: Users },
+    { id: "hero", icon: Sparkles },
     { id: "photos", icon: ImageIcon },
   ];
 
@@ -225,7 +227,9 @@ const Dashboard = () => {
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="pt-10"
         >
-          {tab === "members" ? <MembersManager /> : <PhotosManager />}
+          {tab === "members" && <MembersManager />}
+          {tab === "hero" && <HeroPhotosManager />}
+          {tab === "photos" && <PhotosManager />}
         </motion.div>
       </div>
     </div>
