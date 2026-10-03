@@ -24,6 +24,16 @@ Takes about five minutes.
 That creates the `members` and `photos` tables, the public `media` storage bucket, and the
 security rules: **anyone can read, only signed-in committee accounts can write.**
 
+**Check the output before moving on.** The last statement prints one row reading `media | t`.
+If no row comes back, the storage half failed — some projects don't grant the SQL Editor
+ownership of the storage tables, and it errors with *"must be owner of table objects"* while
+everything above it succeeds. Uploads then fail with *Storage bucket "media" does not exist*
+even though login and the team list work. Create it by hand instead:
+
+- **Storage → New bucket** → name `media`, tick **Public bucket**
+- **Storage → media → Policies → New policy** → template *Allow access to authenticated
+  users only*, applied to `INSERT`, `UPDATE` and `DELETE`
+
 ## 3. Create the committee login
 
 1. Sidebar → **Authentication** → **Users** → **Add user** → **Create new user**.

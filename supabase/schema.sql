@@ -67,11 +67,24 @@ create policy "photos are writable by signed-in users"
   with check (true);
 
 -- ============================================================ storage
+--
+-- NOTE: on some projects the SQL Editor lacks ownership of the storage tables,
+-- so everything below can fail with "must be owner of table objects" even
+-- though every statement above succeeded. Read the output, and if it did fail
+-- create the bucket and its policies through the Storage UI instead:
+--   Storage -> New bucket -> name "media", tick "Public bucket"
+--   Storage -> media -> Policies -> template "Allow access to authenticated
+--   users only", applied to INSERT, UPDATE and DELETE.
+-- The verification query at the very bottom tells you which happened.
 
 -- Public bucket holding event photos and member portraits.
-insert into storage.buckets (id, name, public)
-values ('media', 'media', true)
-on conflict (id) do update set public = true;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('media', 'media', true, 10485760,
+        array['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+on conflict (id) do update
+  set public = true,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "media is publicly readable" on storage.objects;
 create policy "media is publicly readable"
@@ -96,3 +109,8 @@ create policy "media is deletable by signed-in users"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'media');
+
+-- ============================================================ verify
+-- Expect one row reading: media | t
+-- No row means the bucket was NOT created — use the Storage UI (see note above).
+select id, public from storage.buckets where id = 'media';
