@@ -25,14 +25,16 @@ const Reveal = ({
   children,
   className = "",
   delay = 0,
-  duration = 0.7,
+  duration = 0.5,
   direction = "up",
   once = true,
 }: Props) => {
   const { x, y } = offset[direction];
   const variants: Variants = {
-    hidden: { opacity: 0, x, y, filter: "blur(6px)" },
-    show: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
+    // Only opacity and transform — both run on the compositor. Animating
+    // `filter` here forced a full repaint of each section on every frame.
+    hidden: { opacity: 0, x, y },
+    show: { opacity: 1, x: 0, y: 0 },
   };
 
   return (

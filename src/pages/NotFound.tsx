@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import Logo from "@/components/Logo";
-import Aurora from "@/components/background/Aurora";
-import CircuitField from "@/components/background/CircuitField";
+import Backdrop from "@/components/background/Backdrop";
 import Magnetic from "@/components/motion/Magnetic";
 
 const NotFound = () => {
@@ -12,11 +11,7 @@ const NotFound = () => {
 
   return (
   <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-ink px-6 text-center text-white">
-    <Aurora />
-    <div className="absolute inset-0">
-      <CircuitField />
-    </div>
-    <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
+      <Backdrop tone="hero" />
 
     <div className="relative">
       <Logo variant="white" className="mx-auto h-16 w-16 animate-float-y" />

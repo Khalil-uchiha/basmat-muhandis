@@ -1,58 +1,34 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { ReactNode } from "react";
 
 /**
- * Subtle 3D tilt plus a cursor-following sheen.
- * Kept shallow on purpose — professional, not gimmicky.
+ * A restrained hover lift for cards.
+ *
+ * This used to track the pointer and drive four springs plus a cursor-following
+ * sheen, per card. Across the project that is seventeen instances — on the
+ * projects grid, nine of them side by side — which meant a stream of pointer
+ * events and spring integrations competing with scrolling. The effect now runs
+ * entirely on the compositor: a transform and a shadow, driven by CSS hover.
+ *
+ * The props are kept so call sites did not have to change; `max` is accepted
+ * and ignored.
  */
 const TiltCard = ({
   children,
   className = "",
-  max = 7,
+  max,
 }: {
   children: ReactNode;
   className?: string;
+  /** @deprecated kept for call-site compatibility; the tilt is no longer 3D. */
   max?: number;
 }) => {
-  const px = useMotionValue(0.5);
-  const py = useMotionValue(0.5);
-
-  const rotateX = useSpring(useTransform(py, [0, 1], [max, -max]), { stiffness: 220, damping: 20 });
-  const rotateY = useSpring(useTransform(px, [0, 1], [-max, max]), { stiffness: 220, damping: 20 });
-  const sheenX = useTransform(px, (v) => `${v * 100}%`);
-  const sheenY = useTransform(py, (v) => `${v * 100}%`);
-
-  const handleMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    px.set((e.clientX - rect.left) / rect.width);
-    py.set((e.clientY - rect.top) / rect.height);
-  };
-
-  const reset = () => {
-    px.set(0.5);
-    py.set(0.5);
-  };
-
+  void max;
   return (
-    <motion.div
-      onPointerMove={handleMove}
-      onPointerLeave={reset}
-      style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className={`group relative [transform-style:preserve-3d] ${className}`}
+    <div
+      className={`group relative transition-transform duration-500 ease-smooth will-change-transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${className}`}
     >
       {children}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: useTransform(
-            [sheenX, sheenY],
-            ([sx, sy]) =>
-              `radial-gradient(360px circle at ${sx} ${sy}, hsl(var(--brand) / 0.16), transparent 60%)`
-          ),
-        }}
-      />
-    </motion.div>
+    </div>
   );
 };
 

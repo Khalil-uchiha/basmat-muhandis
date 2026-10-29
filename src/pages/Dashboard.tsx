@@ -7,8 +7,7 @@ import { Link } from "react-router-dom";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
-import Aurora from "@/components/background/Aurora";
-import CircuitField from "@/components/background/CircuitField";
+import Backdrop from "@/components/background/Backdrop";
 import HeroPhotosManager from "@/components/dashboard/HeroPhotosManager";
 import MembersManager from "@/components/dashboard/MembersManager";
 import PhotosManager from "@/components/dashboard/PhotosManager";
@@ -45,11 +44,7 @@ const SignIn = ({ onSubmit }: { onSubmit: (email: string, password: string) => P
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-ink px-6 py-16">
-      <Aurora />
-      <div className="absolute inset-0">
-        <CircuitField />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
+      <Backdrop tone="hero" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

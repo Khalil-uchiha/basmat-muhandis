@@ -10,7 +10,7 @@ import {
 } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 
-import Logo from "./Logo";
+import HeroDeckEmpty from "./HeroDeckEmpty";
 import { fetchHeroPhotos } from "@/lib/content";
 
 const AUTOPLAY_MS = 4200;
@@ -82,21 +82,8 @@ const HeroPhotoStack = () => {
     return () => window.clearInterval(id);
   }, [paused, photos.length, step]);
 
-  // Empty deck → the emblem keeps the composition balanced.
-  if (photos.length === 0) {
-    return (
-      <div aria-hidden className="relative flex h-full w-full items-center justify-center">
-        <div
-          className="absolute h-[70%] w-[70%] rounded-full blur-[80px]"
-          style={{ background: "radial-gradient(circle, hsl(var(--brand) / 0.35), transparent 70%)" }}
-        />
-        <Logo
-          variant="white"
-          className="relative h-48 w-48 animate-float-y opacity-20 sm:h-64 sm:w-64 lg:h-80 lg:w-80"
-        />
-      </div>
-    );
-  }
+  // Empty deck → the framed placeholder keeps the composition balanced.
+  if (photos.length === 0) return <HeroDeckEmpty />;
 
   const current = photos[active];
 
@@ -170,7 +157,7 @@ const HeroPhotoStack = () => {
                   <motion.span
                     aria-hidden
                     style={{ background: sheen }}
-                    className="pointer-events-none absolute inset-0 rounded-[1.75rem] mix-blend-overlay"
+                    className="pointer-events-none absolute inset-0 rounded-[1.75rem] opacity-60"
                   />
                 )}
 

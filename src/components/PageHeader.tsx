@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
-import Aurora from "./background/Aurora";
-import CircuitField from "./background/CircuitField";
+import Backdrop from "./background/Backdrop";
 
 /** Shared masthead for every inner page. */
 const PageHeader = ({
@@ -14,11 +13,7 @@ const PageHeader = ({
   lede: string;
 }) => (
   <section className="relative overflow-hidden bg-ink pb-20 pt-36 text-white sm:pb-24 sm:pt-44">
-    <Aurora className="opacity-70" />
-    <div className="absolute inset-0 opacity-60">
-      <CircuitField />
-    </div>
-    <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid opacity-40 mask-fade-b" />
+      <Backdrop tone="panel" />
 
     <div className="container relative">
       <motion.span

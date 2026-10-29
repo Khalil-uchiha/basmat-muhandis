@@ -1,19 +1,27 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ArrowUpRight, MousePointerClick } from "lucide-react";
-import { useRef } from "react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Suspense, lazy, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import HeroPhotoStack from "./HeroPhotoStack";
 import Logo from "./Logo";
-import Aurora from "./background/Aurora";
-import CircuitField from "./background/CircuitField";
+import HeroDeckEmpty from "./HeroDeckEmpty";
+import Backdrop from "./background/Backdrop";
 import Magnetic from "./motion/Magnetic";
 import { club } from "@/data/site";
 
+/**
+ * Deferred: this is the only thing in the hero that reaches for Supabase, and
+ * pulling the SDK into the first-load bundle doubled it. The headline paints
+ * immediately and the deck streams in behind the emblem placeholder.
+ */
+const HeroPhotoStack = lazy(() => import("./HeroPhotoStack"));
+
+// Opacity and transform only. Animating `filter` here left the headline
+// visibly soft while it settled and forced a repaint on every frame.
 const line = {
-  hidden: { opacity: 0, y: 26, filter: "blur(8px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)" },
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0 },
 };
 
 const Hero = () => {
@@ -31,11 +39,7 @@ const Hero = () => {
       ref={ref}
       className="relative flex min-h-[100svh] items-center overflow-hidden bg-ink text-white"
     >
-      <Aurora />
-      <div className="absolute inset-0">
-        <CircuitField />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-grid opacity-40 mask-fade-b" />
+      <Backdrop tone="hero" />
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
@@ -45,13 +49,13 @@ const Hero = () => {
         <motion.div
           initial="hidden"
           animate="show"
-          transition={{ staggerChildren: 0.11, delayChildren: 0.15 }}
+          transition={{ staggerChildren: 0.07, delayChildren: 0.05 }}
           className="max-w-2xl lg:max-w-none"
         >
           {/* Badge */}
           <motion.div
             variants={line}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] py-1.5 pl-1.5 pr-4 backdrop-blur"
           >
             <Logo variant="white" className="h-6 w-6" />
@@ -68,7 +72,7 @@ const Hero = () => {
           <h1 className="font-display text-[clamp(2.5rem,7vw,4.75rem)] font-bold leading-[1.04] tracking-[-0.02em]">
             <motion.span
               variants={line}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               className="block"
             >
               <span className="md:whitespace-nowrap">
@@ -78,7 +82,7 @@ const Hero = () => {
             </motion.span>
             <motion.span
               variants={line}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               className="block text-white/55"
             >
               {t("hero.titleSecond")}
@@ -88,7 +92,7 @@ const Hero = () => {
           {/* Lede */}
           <motion.p
             variants={line}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg"
           >
 {t("hero.lede")}
@@ -97,7 +101,7 @@ const Hero = () => {
           {/* CTAs */}
           <motion.div
             variants={line}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10 flex flex-wrap items-center gap-3"
           >
             <Magnetic strength={0.3}>
@@ -122,17 +126,6 @@ const Hero = () => {
               </Link>
             </Magnetic>
           </motion.div>
-
-          {/* Hint that the background is alive */}
-          <motion.p
-            variants={line}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            /* Pointer-only: meaningless on a touch device, and it costs the
-               photo deck vertical space above the fold. */
-            className="mt-9 hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/30 [@media(any-hover:hover)]:inline-flex"
-          >
-            <MousePointerClick size={13} /> {t("hero.hint")}
-          </motion.p>
         </motion.div>
 
         {/* Photo deck — right on desktop, below the copy on phones */}
@@ -143,7 +136,9 @@ const Hero = () => {
           transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="relative mx-auto mt-10 h-64 w-full max-w-sm sm:h-72 lg:mx-0 lg:mt-0 lg:h-[26rem] lg:max-w-none"
         >
-          <HeroPhotoStack />
+          <Suspense fallback={<HeroDeckEmpty />}>
+            <HeroPhotoStack />
+          </Suspense>
         </motion.div>
         </div>
       </motion.div>
