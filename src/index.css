@@ -279,6 +279,70 @@
   to { transform: translateX(-50%); }
 }
 
+/* ------------------------------------------------------------ backdrop */
+
+/* Annotation text inside the backdrop SVGs */
+.bm-label {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.85;
+}
+
+/* Arm joints — nested groups, so each rotation carries the next joint. The
+   origins are joint centres in the SVG's own coordinates. */
+.bm-arm-shoulder,
+.bm-arm-elbow,
+.bm-arm-wrist {
+  transform-box: view-box;
+}
+.bm-arm-shoulder {
+  transform-origin: 400px 610px;
+  animation: bm-shoulder 14s ease-in-out infinite;
+}
+.bm-arm-elbow {
+  transform-origin: 300px 370px;
+  animation: bm-elbow 14s ease-in-out infinite;
+}
+.bm-arm-wrist {
+  transform-origin: 560px 260px;
+  animation: bm-wrist 7s ease-in-out infinite;
+}
+
+@keyframes bm-shoulder {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes bm-elbow {
+  0%, 100% { transform: rotate(5deg); }
+  50% { transform: rotate(-7deg); }
+}
+@keyframes bm-wrist {
+  0%, 100% { transform: rotate(-9deg); }
+  50% { transform: rotate(11deg); }
+}
+
+/* A short bright dash running the length of a PCB trace */
+.bm-signal {
+  stroke-dasharray: 7 93;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  animation: bm-signal 4.2s linear infinite;
+}
+@keyframes bm-signal {
+  0% { stroke-dashoffset: 100; opacity: 0; }
+  8% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Nothing in the backdrop animates while it is off screen */
+.bm-backdrop[data-paused="true"] * {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
