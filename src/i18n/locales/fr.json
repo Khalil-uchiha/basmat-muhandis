@@ -21,7 +21,9 @@
     "lede": "Basmat-Muhandis est un club d'ingénierie étudiant qui construit des choses réelles — robotique, logiciel et électronique — et qui apprend à la prochaine génération à les construire aussi.",
     "ctaPrimary": "Rejoindre le club",
     "ctaSecondary": "Voir les projets",
-    "established": "Depuis {{year}}"
+    "established": "Depuis {{year}}",
+    "stageEyebrow": "Robotique · Électronique · Code",
+    "stageLine": "Conçu par des étudiants. Pensé pour bouger."
   },
   "stats": {
     "members": "Membres actifs",

@@ -10,7 +10,6 @@ import {
 } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 
-import HeroDeckEmpty from "./HeroDeckEmpty";
 import { fetchHeroPhotos } from "@/lib/content";
 
 const AUTOPLAY_MS = 4200;
@@ -82,14 +81,15 @@ const HeroPhotoStack = () => {
     return () => window.clearInterval(id);
   }, [paused, photos.length, step]);
 
-  // Empty deck → the framed placeholder keeps the composition balanced.
-  if (photos.length === 0) return <HeroDeckEmpty />;
+  // Empty deck → nothing; the 3D arm behind fills the column.
+  if (photos.length === 0) return null;
 
   const current = photos[active];
 
   return (
     <div
-      className="relative h-full w-full"
+      // Owns its own height on small screens, so an empty deck takes no room.
+      className="relative mt-10 h-64 w-full sm:h-72 lg:mt-0 lg:h-full"
       style={{ perspective: 1400 }}
       onPointerMove={handleMove}
       onPointerLeave={() => {

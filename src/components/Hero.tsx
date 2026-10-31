@@ -1,11 +1,10 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Suspense, lazy, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import Logo from "./Logo";
-import HeroDeckEmpty from "./HeroDeckEmpty";
 import Backdrop from "./background/Backdrop";
 import Magnetic from "./motion/Magnetic";
 import { club } from "@/data/site";
@@ -27,23 +26,40 @@ const line = {
 const Hero = () => {
   const { t } = useTranslation();
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const reduceMotion = useReducedMotion();
 
-  // gentle parallax as the hero leaves the viewport
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const emblemY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  // The hero is a pinned stage: the section is taller than the viewport and
+  // its content sticks while the visitor scrolls through it. Progress runs
+  // 0→1 across that pinned stretch and drives the 3D camera and arm.
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  // Smoothed copy of the progress for the DOM layers. Deriving opacity
+  // straight from useScroll lets Framer hand it to a native scroll timeline,
+  // which proved unreliable; a spring keeps it on Framer's own loop and
+  // takes the edge off fast flicks.
+  const smooth = useSpring(scrollYProgress, { stiffness: 140, damping: 26, mass: 0.35 });
+
+  // Copy and photo deck hand the stage to the robot in the first half…
+  const contentY = useTransform(smooth, [0, 0.6], [0, -70]);
+  const contentOpacity = useTransform(smooth, [0.12, 0.5], [1, 0]);
+  const contentEvents = useTransform(contentOpacity, (v) => (v < 0.15 ? "none" : "auto"));
+  const deckY = useTransform(smooth, [0, 0.6], [0, -50]);
+  const cueOpacity = useTransform(smooth, [0, 0.08], [1, 0]);
+  // …and a short closing line arrives while the camera finishes its move.
+  const stageOpacity = useTransform(smooth, [0.55, 0.78, 0.96, 1], [0, 1, 1, 0.6]);
+  const stageY = useTransform(smooth, [0.55, 0.8], [30, 0]);
 
   return (
     <section
       ref={ref}
-      className="relative flex min-h-[100svh] items-center overflow-hidden bg-ink text-white"
+      // Reduced-motion visitors get an ordinary hero: no pin, no long scroll.
+      className={`relative bg-ink text-white ${reduceMotion ? "" : "h-[185svh]"}`}
     >
-      <Backdrop tone="hero" />
+      <div className="sticky top-0 flex h-[100svh] min-h-[620px] items-center overflow-hidden">
+      <Backdrop tone="hero" progress={scrollYProgress} />
 
       <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="container relative py-28 sm:py-32"
+        style={{ y: contentY, opacity: contentOpacity, pointerEvents: contentEvents }}
+        className="container relative py-24 sm:py-32"
       >
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
         <motion.div
@@ -130,24 +146,39 @@ const Hero = () => {
 
         {/* Photo deck — right on desktop, below the copy on phones */}
         <motion.div
-          style={{ y: emblemY }}
+          style={{ y: deckY }}
           initial={{ opacity: 0, scale: 0.94, x: 30 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto mt-10 h-64 w-full max-w-sm sm:h-72 lg:mx-0 lg:mt-0 lg:h-[26rem] lg:max-w-none"
+          className="relative mx-auto w-full max-w-sm lg:mx-0 lg:h-[26rem] lg:max-w-none"
         >
-          <Suspense fallback={<HeroDeckEmpty />}>
+          <Suspense fallback={null}>
             <HeroPhotoStack />
           </Suspense>
         </motion.div>
         </div>
       </motion.div>
 
+      {/* Closing line, shown once the camera has moved in on the arm */}
+      {!reduceMotion && (
+        <motion.div
+          style={{ opacity: stageOpacity, y: stageY }}
+          className="pointer-events-none absolute inset-x-0 bottom-16 sm:bottom-20"
+        >
+          <div className="container">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-brand-bright">
+              {t("hero.stageEyebrow")}
+            </p>
+            <p className="mt-3 max-w-xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+              {t("hero.stageLine")}
+            </p>
+          </div>
+        </motion.div>
+      )}
+
       {/* Scroll cue */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8 }}
+        style={{ opacity: cueOpacity }}
         className="absolute inset-x-0 bottom-7 flex justify-center"
       >
         <div className="flex h-9 w-[22px] items-start justify-center rounded-full border border-white/20 p-1.5">
@@ -158,6 +189,7 @@ const Hero = () => {
           />
         </div>
       </motion.div>
+      </div>
     </section>
   );
 };
